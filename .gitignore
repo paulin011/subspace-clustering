@@ -1,0 +1,7 @@
+*.log
+nohup.out
+data/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+local_env/

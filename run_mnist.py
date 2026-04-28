@@ -1,4 +1,10 @@
 import numpy as np
+import numpy as np
+# Fix Kymatio bug
+import kymatio.backend.numpy_backend as nb
+nb._np = np
+
+
 import time
 
 import torch
@@ -41,15 +47,22 @@ if use_cuda:
     raw_train_data = raw_train_data.cuda()
     raw_test_data = raw_test_data.cuda()
 
-train_data = scattering(raw_train_data) 
+# Convert to numpy if it's a torch tensor
+if hasattr(raw_train_data, 'numpy'):
+    raw_train_data = raw_train_data.numpy()
+
+train_data = scattering(raw_train_data)
+if hasattr(raw_test_data, 'numpy'):
+    raw_test_data = raw_test_data.numpy()
+
 test_data = scattering(raw_test_data)
-data = torch.cat((train_data, test_data), 0)
+data = np.concatenate((train_data, test_data), axis=0)
 
 print('Data preprocessing....')
 n_sample = data.shape[0]
 
 # scattering transform normalization
-data = data.cpu().numpy().reshape(n_sample, data.shape[2], -1)
+data = data.reshape(n_sample, data.shape[2], -1)
 image_norm = np.linalg.norm(data, ord=np.inf, axis=2, keepdims=True)  # infinity norm of each transform
 data = data / image_norm  # normalize each scattering transform to the range [-1, 1]
 data = data.reshape(n_sample, -1)  # fatten and concatenate all transforms
