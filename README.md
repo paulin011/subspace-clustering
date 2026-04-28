@@ -1,3 +1,23 @@
+# Toutorial on how to setup
+1. Create and Activate the Venv
+
+Run this in your /scratch/subspace-clustering folder to keep the environment local to the project.
+Bash
+
+# Create the virtual environment
+python3 -m venv .venv Python=3.9
+
+# Activate it
+source .venv/bin/activate
+
+2. Install Dependencies
+
+This single command handles the library bridge we built, installing the CPU-version of Torch to save space and the specific math libraries needed for clustering.
+Bash
+
+pip install "numpy<2.0" spams-bin kymatio scipy scikit-learn progressbar2 \
+    torch torchvision --extra-index-url https://download.pytorch.org/whl/cpu
+
 # Subspace-Clustering
 Toolbox for large scale subspace clustering
 
